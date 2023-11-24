@@ -6,6 +6,7 @@ You will also need to specify the extra amount you can spare
 Algo will generate an ammortization table for all loans applying the extra payment to the first and then the next once the first is paid off
 
 // Input variables
+
 $amount_due = 10000; // Example loan amount of $10,000
 
 $interest_rate = 0.05; // Example interest rate of 5%
