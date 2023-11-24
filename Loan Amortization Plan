@@ -1,0 +1,90 @@
+<?php
+
+// Input variables
+$amount_due = 10000; // Example loan amount of $10,000
+$interest_rate = 0.05; // Example interest rate of 5%
+$payment_frequency = 'monthly'; // Example payment frequency of monthly
+$minimum_payment = 100; // Example minimum payment of $100
+$extra_payment = 50; // Example extra payment of $50
+
+// Calculate periodic interest rate based on payment frequency
+switch ($payment_frequency) {
+    case 'weekly':
+        $periodic_interest_rate = $interest_rate / 52;
+        break;
+    case 'bi-weekly':
+        $periodic_interest_rate = $interest_rate / 26;
+        break;
+    case 'monthly':
+        $periodic_interest_rate = $interest_rate / 12;
+        break;
+    default:
+        echo 'Invalid payment frequency';
+        exit();
+}
+
+// Calculate regular payment amount using formula for present value of annuity
+//$regular_payment = ($amount_due * //$periodic_interest_rate) / (1 - (1 + //$periodic_interest_rate)**(-1 * //count_payment_periods($payment_frequency))); 
+
+// Calculate remaining balance and generate amortization schedule
+$remaining_balance = $amount_due;
+$payment_period = 1;
+
+echo '<table>';
+echo '<tr><th>Payment Period</th><th>Payment Amount</th><th>Interest Portion</th><th>Principal Portion</th><th>Remaining Balance</th></tr>';
+
+while ($remaining_balance > 0) {
+    // Calculate interest portion of payment
+    $interest_portion = $remaining_balance * $periodic_interest_rate;
+
+    // Calculate principal portion of payment
+    $principal_portion = $minimum_payment - $interest_portion;
+    if ($principal_portion > $remaining_balance) {
+        $principal_portion = $remaining_balance;
+    }
+
+    // Subtract extra payment from remaining balance if applicable
+    $remaining_balance -= $principal_portion;
+/* Need a way to apply extra payment only to the first loan and keep track of payment period. If payment period in first loan is 48 and in the second loan is 52 then the extra payment should be applied to second loan on 49th payment. */
+    if ($extra_payment > 0) {
+       If loop_Index == extraPaymentAvailableindex
+        {
+           remaining_balance -= $extra_payment_overflow
+           $principal_portion += $extra_payment_overflow
+        }
+       Else  If loop_Index >= extraPaymentAvailable index
+        {
+            $remaining_balance -= $extra_payment;
+             $principal_portion += $extra_payment
+
+        }
+    }
+    // Make sure remaining balance is not negative
+    if ($remaining_balance <= 0) {
+       If (ExtraPaymentAvailableIndex == 0 || loopindex >= ExtraPaymentAvailableIndex)
+       {
+        ExtraPaymentAvailableIndex = loopindex
+        Extra_payment_overflow = abs(remaining_balance)
+         $principal_portion -= $Extra_payment_overflow
+
+        }
+        If Extra_payment_Overflow == 0 
+        { 
+         Extra_Paymet_Overflow = extra_payment
+         }
+        $remaining_balance = 0;
+    }
+
+    // Output row of table
+    echo '<tr>';
+    echo '<td>' . $payment_period . '</td>';
+    echo '<td>' . number_format($regular_payment + $extra_payment, 2) . '</td>';
+    echo '<td>' . number_format($interest_portion, 2) . '</td>';
+    echo '<td>' . number_format($principal_portion, 2) . '</td>';
+    echo '<td>' . number_format($remaining_balance, 2) . '</td>';
+    echo '</tr>';
+
+    $payment_period++;
+}
+
+echo '</table>';
